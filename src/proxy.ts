@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
 export async function proxy(request: NextRequest) {
-  const { supabaseResponse, user } = await updateSession(request);
+  const { supabaseResponse, user, supabase } = await updateSession(request);
   const pathname = request.nextUrl.pathname;
 
   const protectedCustomerRoutes = ["/checkout", "/orders", "/profile"];
@@ -21,13 +21,17 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    const { createClient } = await import("@/lib/supabase/server");
-    const supabase = await createClient();
-    const { data: profile } = await supabase
+    const { data: profile, error } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", user.id)
-      .single();
+      .maybeSingle();
+
+    if (error) {
+      console.error("Supabase profile query error in proxy:", error);
+    }
+
+    console.log("User profile role:", profile?.role);
 
     if (profile?.role !== "admin") {
       return NextResponse.redirect(new URL("/", request.url));

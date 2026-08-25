@@ -30,10 +30,9 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  // Refresh session — do NOT remove this
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  return { supabaseResponse, user };
+  return { supabaseResponse, user, supabase };
 }

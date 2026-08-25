@@ -22,7 +22,8 @@ BEGIN
   );
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER; -- users session cookie does not exist yet
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+                                      -- users session cookie does not exist yet
                                       -- when the user just signed up, so we need
                                       -- to use SECURITY DEFINER to bypass RLS
                                       -- and create their profile.

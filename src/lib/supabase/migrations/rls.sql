@@ -1,4 +1,17 @@
 ------------------------------------------------------
+---- Helper Function (Prevents RLS Infinite Recursion)
+------------------------------------------------------
+CREATE OR REPLACE FUNCTION is_admin()
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = auth.uid() AND role = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+------------------------------------------------------
 ---- Products and Categories
 ------------------------------------------------------
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
@@ -13,13 +26,7 @@ USING (is_active = true);
 -- Admins can do everything with products
 CREATE POLICY "Admins can manage products"
 ON products FOR ALL
-USING (
-  EXISTS (
-    SELECT 1 FROM profiles
-    WHERE profiles.id = auth.uid()
-    AND profiles.role = 'admin'
-  )
-);
+USING (is_admin());
  
 -- Same pattern for categories
 CREATE POLICY "Anyone can read categories"
@@ -27,9 +34,7 @@ ON categories FOR SELECT USING (true);
  
 CREATE POLICY "Admins can manage categories"
 ON categories FOR ALL
-USING (
-  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-);
+USING (is_admin());
 
 -- Anyone can read product images
 CREATE POLICY "Anyone can read product images"
@@ -41,15 +46,11 @@ USING (
     AND products.is_active = true
   )
 );
--- only show images belonging to active products
--- if product is inactive, its images are also hidden
 
 -- Admins can manage product images
 CREATE POLICY "Admins can manage product images"
 ON product_images FOR ALL
-USING (
-  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-);
+USING (is_admin());
 
 ------------------------------------------------------
 ---- Orders
@@ -67,15 +68,11 @@ WITH CHECK (auth.uid() = user_id);
  
 CREATE POLICY "Admins can read all orders"
 ON orders FOR SELECT
-USING (
-  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-);
+USING (is_admin());
  
 CREATE POLICY "Admins can update order status"
 ON orders FOR UPDATE
-USING (
-  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-);
+USING (is_admin());
  
 -- Order items follow same pattern as orders
 CREATE POLICY "Users can read own order items"
@@ -93,14 +90,12 @@ WITH CHECK (
     WHERE orders.id = order_id
     AND orders.user_id = auth.uid()
   )
-);  -- only allow inserting items into orders that belong to the current user
+);
 
 -- Admins can manage (including inserting) order items (needed for order creation flow)
 CREATE POLICY "Admins can manage order items"
 ON order_items FOR ALL
-USING (
-  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-);
+USING (is_admin());
 
 ------------------------------------------------------
 ---- Profiles
@@ -118,13 +113,9 @@ WITH CHECK (role = (SELECT role FROM profiles WHERE id = auth.uid()));
 
 CREATE POLICY "Admins can read all profiles"
 ON profiles FOR SELECT
-USING (
-  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-);
+USING (is_admin());
 
 -- Admins can update any profile (including promoting users to admin)
 CREATE POLICY "Admins can update all profiles"
 ON profiles FOR UPDATE
-USING (
-  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-);
+USING (is_admin());
