@@ -63,7 +63,7 @@ export default function RegisterPage() {
             name="password"
             type="password"
             required
-            minLength={6}
+            minLength={8}
             className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
           />
         </div>
@@ -92,7 +92,7 @@ export default function RegisterPage() {
 
       <p className="mt-6 text-center text-sm text-gray-500">
         Already have an account?{" "}
-        <Link href="/login" className="text-black font-medium hover:underline">
+        <Link href="/login" className="text-black font-medium">
           Login
         </Link>
       </p>

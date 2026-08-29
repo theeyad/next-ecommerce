@@ -21,17 +21,11 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    const { data: profile, error } = await supabase
+    const { data: profile } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", user.id)
       .maybeSingle();
-
-    if (error) {
-      console.error("Supabase profile query error in proxy:", error);
-    }
-
-    console.log("User profile role:", profile?.role);
 
     if (profile?.role !== "admin") {
       return NextResponse.redirect(new URL("/", request.url));
