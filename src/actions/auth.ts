@@ -4,12 +4,12 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { FieldValues } from "react-hook-form";
 
-export async function signUp(formData: FormData) {
+export async function signUp(values: FieldValues) {
   const supabase = await createClient();
 
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  const fullName = formData.get("full_name") as string;
+  const email = values.email;
+  const password = values.password;
+  const fullName = values.full_name;
 
   const { error } = await supabase.auth.signUp({
     email,
@@ -58,9 +58,9 @@ export async function signInWithGoogle() {
   if (data.url) redirect(data.url);
 }
 
-export async function forgotPassword(formData: FormData) {
+export async function forgotPassword(values: FieldValues) {
   const supabase = await createClient();
-  const email = formData.get("email") as string;
+  const email = values.email;
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`,
@@ -70,9 +70,9 @@ export async function forgotPassword(formData: FormData) {
   return { success: true };
 }
 
-export async function resetPassword(formData: FormData) {
+export async function resetPassword(values: FieldValues) {
   const supabase = await createClient();
-  const password = formData.get("password") as string;
+  const password = values.password;
 
   const { error } = await supabase.auth.updateUser({ password });
 
