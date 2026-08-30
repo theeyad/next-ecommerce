@@ -31,7 +31,7 @@ export default function ForgotPasswordForm() {
         message: result.error,
       });
     } else {
-      setShowSuccess(true);
+      setShowSuccess(result.success!); // should be true
     }
     reset();
   }

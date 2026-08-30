@@ -14,7 +14,6 @@ export default function ResetPasswordForm() {
     register,
     handleSubmit,
     setError,
-    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(resetPasswordSchema),
@@ -32,7 +31,6 @@ export default function ResetPasswordForm() {
       });
       setLoading(false);
     }
-    reset();
   }
 
   return (

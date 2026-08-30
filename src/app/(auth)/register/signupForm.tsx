@@ -95,7 +95,7 @@ export default function SignupForm() {
         <button
           type="submit"
           disabled={isSubmitting || loading}
-          className="w-full bg-black text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-all duration-300 disabled:opacity-50"
+          className="w-full bg-black text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting || loading ? "Please wait..." : "Create Account"}
         </button>
@@ -110,7 +110,7 @@ export default function SignupForm() {
       <button
         onClick={handleGoogle}
         disabled={loading}
-        className="w-full flex items-center justify-center gap-3 border py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all duration-300 disabled:opacity-50"
+        className="w-full flex items-center justify-center gap-3 border py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <Image width={15} height={15} src="/google.svg" alt="google" />
         Continue with Google
