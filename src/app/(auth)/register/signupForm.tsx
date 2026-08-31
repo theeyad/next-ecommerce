@@ -49,7 +49,7 @@ export default function SignupForm() {
   return (
     <>
       {errors.root && (
-        <p className="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded">
+        <p className="mb-4 text-sm text-black bg-[#ef767a] p-3 rounded">
           {errors.root.message}
         </p>
       )}
@@ -60,7 +60,7 @@ export default function SignupForm() {
           <input
             {...register("full_name")}
             type="text"
-            className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full border border-white/50 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-white transition-colors duration-300"
           />
           {errors.full_name && (
             <p className="text-red-500 text-sm mt-1">
@@ -73,7 +73,7 @@ export default function SignupForm() {
           <input
             {...register("email")}
             type="email"
-            className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full border border-white/50 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-white transition-colors duration-300"
           />
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -84,7 +84,7 @@ export default function SignupForm() {
           <input
             {...register("password")}
             type="password"
-            className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full border border-white/50 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-white transition-colors duration-300"
           />
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">
@@ -95,7 +95,7 @@ export default function SignupForm() {
         <button
           type="submit"
           disabled={isSubmitting || loading}
-          className="w-full bg-black text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-black border border-black text-white py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] transition-all duration-300 focus:outline-none focus:border-white disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting || loading ? "Please wait..." : "Create Account"}
         </button>
@@ -103,14 +103,14 @@ export default function SignupForm() {
 
       <div className="my-4 flex items-center gap-2">
         <div className="flex-1 h-px bg-gray-200" />
-        <span className="text-xs text-gray-400">or</span>
+        <span className="text-xs text-[#1d1e22]">or</span>
         <div className="flex-1 h-px bg-gray-200" />
       </div>
 
       <button
         onClick={handleGoogle}
         disabled={loading}
-        className="w-full flex items-center justify-center gap-3 border py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full flex items-center justify-center gap-3 border border-white/50 py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] hover:bg-[#507994] transition-all duration-300 focus:outline-none focus:border-white disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <Image width={15} height={15} src="/google.svg" alt="google" />
         Continue with Google

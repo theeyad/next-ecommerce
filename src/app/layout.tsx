@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { SaasflareShell } from "@saasflare/ui";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -22,8 +23,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
+    <SaasflareShell
       className={cn(
         "h-full",
         "antialiased",
@@ -32,8 +32,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         "font-sans",
         inter.variable,
       )}
+      bodyClassName="min-h-full flex flex-col"
+      palette="ocean"
+      surface="glass"
+      radius="pill"
+      iconWeight="duotone"
+      theme="light"
+      lang="en"
     >
-      <body className="min-h-full flex flex-col">{children}</body>
-    </html>
+      {children}
+    </SaasflareShell>
   );
 }

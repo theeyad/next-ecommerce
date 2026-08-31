@@ -36,7 +36,7 @@ export default function ResetPasswordForm() {
   return (
     <>
       {errors.root && (
-        <p className="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded">
+        <p className="mb-4 text-sm text-black bg-[#ef767a] p-3 rounded">
           {errors.root.message}
         </p>
       )}
@@ -47,7 +47,7 @@ export default function ResetPasswordForm() {
           <input
             {...register("password")}
             type="password"
-            className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full border border-white/50 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-white transition-colors duration-300"
           />
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">
@@ -58,7 +58,7 @@ export default function ResetPasswordForm() {
         <button
           type="submit"
           disabled={isSubmitting || loading}
-          className="w-full bg-black text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-black border border-black text-white py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] transition-all duration-300 focus:outline-none focus:border-white disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting || loading ? "Updating..." : "Update password"}
         </button>
