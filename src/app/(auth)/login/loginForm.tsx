@@ -11,6 +11,13 @@ import type { FieldValues } from "react-hook-form";
 import { loginSchema } from "@/lib/validation/login";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSeparator,
+} from "@/components/ui/field";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -47,61 +54,67 @@ export default function LoginForm() {
   }
 
   return (
-    <>
+    <FieldGroup>
       {errors.root && (
-        <p className="mb-4 text-sm text-black bg-[#ef767a] p-3 rounded">
+        <FieldError className="mb-4 text-sm text-black bg-[#ef767a] p-3 rounded">
           {errors.root.message}
-        </p>
+        </FieldError>
       )}
 
       <form onSubmit={handleSubmit(formSubmitHandler)} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">Email</label>
-          <input
-            {...register("email")}
-            type="email"
-            className="w-full border border-white/50 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-white transition-colors duration-300"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Password</label>
-          <input
-            {...register("password")}
-            type="password"
-            className="w-full border border-white/50 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-white transition-colors duration-300"
-          />
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.password.message}
-            </p>
-          )}
-        </div>
-        <button
-          type="submit"
-          disabled={isSubmitting || loading}
-          className="w-full bg-black border border-black text-white py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] transition-all duration-300 focus:outline-none focus:border-white disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSubmitting || loading ? "Please wait..." : "Login"}
-        </button>
+        <FieldGroup>
+          <Field data-invalid={!!errors.email}>
+            <div className="w-fit">
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+            </div>
+            <input
+              id="email"
+              {...register("email")}
+              type="email"
+              className="w-full outline-0 border border-input shadow-sm rounded-lg px-3 py-2 text-sm focus:outline-3 focus:border-muted transition-all duration-150"
+            />
+            {errors.email && <FieldError>{errors.email.message}</FieldError>}
+          </Field>
+
+          <Field data-invalid={!!errors.password}>
+            <div className="w-fit">
+              <FieldLabel htmlFor="password">Password</FieldLabel>
+            </div>
+            <input
+              id="password"
+              {...register("password")}
+              type="password"
+              className="w-full outline-0 border border-input shadow-sm rounded-lg px-3 py-2 text-sm focus:outline-3 focus:border-muted transition-all duration-150"
+            />
+            {errors.password && (
+              <FieldError>{errors.password.message}</FieldError>
+            )}
+          </Field>
+
+          <Field>
+            <button
+              type="submit"
+              disabled={isSubmitting || loading}
+              className="w-full bg-black outline-0 text-white py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] transition-all duration-150 focus:outline-4 focus:border-muted disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting || loading ? "Please wait..." : "Login"}
+            </button>
+          </Field>
+        </FieldGroup>
       </form>
 
-      <div className="my-4 flex items-center gap-2">
-        <div className="flex-1 h-px bg-gray-200" />
-        <span className="text-xs text-[#1d1e22]">or</span>
-        <div className="flex-1 h-px bg-gray-200" />
-      </div>
+      <FieldSeparator></FieldSeparator>
 
-      <button
-        onClick={handleGoogle}
-        disabled={loading}
-        className="w-full flex items-center justify-center gap-3 border border-white/50 py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] hover:bg-[#507994] transition-all duration-300 focus:outline-none focus:border-white disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <Image width={15} height={15} src="/google.svg" alt="google" />
-        Continue with Google
-      </button>
-    </>
+      <Field>
+        <button
+          onClick={handleGoogle}
+          disabled={loading}
+          className="w-full outline-0 flex items-center justify-center gap-3 border border-input shadow-sm py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] transition-tracking duration-150 focus:outline-4 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Image width={15} height={15} src="/google.svg" alt="google" />
+          Continue with Google
+        </button>
+      </Field>
+    </FieldGroup>
   );
 }

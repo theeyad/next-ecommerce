@@ -1,3 +1,5 @@
+import AuthNavbar from "@/components/shared/AuthNavbar";
+
 export default function AuthLayout({
   children,
 }: {
@@ -5,6 +7,7 @@ export default function AuthLayout({
 }) {
   return (
     <div className="min-h-screen flex items-center justify-center">
+        <AuthNavbar />
       {children}
     </div>
   );

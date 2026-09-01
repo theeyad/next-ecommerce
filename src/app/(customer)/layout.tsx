@@ -1,4 +1,4 @@
-import Navbar from "@/components/shared/Navbar";
+import CustomerNavbar from "@/components/shared/CustomerNavbar";
 
 export default function CustomerLayout({
   children,
@@ -7,7 +7,7 @@ export default function CustomerLayout({
 }) {
   return (
     <div className="min-h-screen">
-      <Navbar />
+      <CustomerNavbar />
       {children}
     </div>
   );
