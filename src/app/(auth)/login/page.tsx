@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import LoginForm from "@/app/(auth)/login/loginForm";
 
 export const metadata: Metadata = {
-  title: "Cartify | Login Page",
+  title: "Baskify | Login Page",
   description: "Login to your account",
 };
 

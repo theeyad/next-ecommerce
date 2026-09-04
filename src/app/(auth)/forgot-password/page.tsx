@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ForgotPasswordForm from "@/app/(auth)/forgot-password/forgotPasswordForm";
 
 export const metadata: Metadata = {
-  title: "Cartify | Forgot Password Page",
+  title: "Baskify | Forgot Password Page",
   description:
     "Forgot your password? Enter your email address and we'll send you a reset link.",
 };

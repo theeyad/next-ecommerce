@@ -16,6 +16,9 @@ export default function CustomerNavbar() {
           <Link href="/register" className="text-sm">
             Register
           </Link>
+          <Link href="/admin" className="text-sm">
+            Admin
+          </Link>
         </>
         <CoolThemeToggle />
       </nav>
