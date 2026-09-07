@@ -1,5 +1,8 @@
+"use client";
+
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { CoolThemeToggle } from "../lightswind/cool-theme-toggle";
 
 export function SiteHeader() {
   return (
@@ -10,7 +13,8 @@ export function SiteHeader() {
           orientation="vertical"
           className="m-2 data-[orientation=vertical]:h-6"
         />
-          <h1 className="text-base font-medium">Admin Dashboard</h1>
+        <h1 className="text-base font-medium">Admin Dashboard</h1>
+        <CoolThemeToggle className="ml-auto" />
       </div>
     </header>
   );

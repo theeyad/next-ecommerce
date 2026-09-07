@@ -1,6 +1,12 @@
 "use client";
 
-import type { Icon } from "@tabler/icons-react";
+import {
+  IconDashboard,
+  IconList,
+  IconListDetails,
+  IconShoppingBag,
+  IconUsers,
+} from "@tabler/icons-react";
 
 import {
   SidebarGroup,
@@ -9,26 +15,48 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string;
-    url: string;
-    icon?: Icon;
-  }[];
-}) {
+const navItems = [
+  {
+    title: "Dashboard",
+    url: "/admin",
+    icon: IconDashboard,
+  },
+  {
+    title: "Categories",
+    url: "/admin/categories",
+    icon: IconListDetails,
+  },
+  {
+    title: "Products",
+    url: "/admin/products",
+    icon: IconShoppingBag,
+  },
+  {
+    title: "Orders",
+    url: "/admin/orders",
+    icon: IconList,
+  },
+];
+
+export function NavMain() {
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
-          {items.map((item) => (
+          {navItems.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
-              </SidebarMenuButton>
+              <SidebarMenuButton
+                render={
+                  <Link href={item.url}>
+                    {item.icon && <item.icon />}
+                    <span>{item.title}</span>
+                  </Link>
+                }
+                tooltip={item.title}
+                className="cursor-default"
+              />
             </SidebarMenuItem>
           ))}
         </SidebarMenu>

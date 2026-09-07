@@ -1,3 +1,10 @@
+import NewCategoryForm from "./NewCategoryForm";
+
 export default function AdminNewCategoryPage() {
-  return <div>Admin New Category Page</div>;
+  return (
+    <>
+      <h2 className="text-xl mb-6">Add Category Page</h2>
+      <NewCategoryForm />
+    </>
+  );
 }

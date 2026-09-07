@@ -71,7 +71,7 @@ export function NavUser({ userData }: { userData: adminUserType }) {
                     <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">
+                    <span className="truncate font-medium text-primary">
                       {userData.fullName}
                     </span>
                     <span className="truncate text-xs text-muted-foreground">
