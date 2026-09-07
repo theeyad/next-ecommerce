@@ -7,11 +7,11 @@ import { uploadStorageImage } from "@/actions/upload";
 import { cn } from "@/lib/utils";
 
 interface ImageUploaderProps {
-  value?: string;
+  value: string;
   onChange: (url: string) => void;
-  onError?: (message: string) => void;
-  bucket?: string;
-  folder?: string;
+  onError: (message: string) => void;
+  bucket: string;
+  folder: string;
   disabled?: boolean;
 }
 
@@ -19,8 +19,8 @@ export function ImageUploader({
   value,
   onChange,
   onError,
-  bucket = "categories",
-  folder = "categories",
+  bucket,
+  folder,
   disabled = false,
 }: ImageUploaderProps) {
   const [uploading, setUploading] = useState(false);
@@ -29,7 +29,7 @@ export function ImageUploader({
 
   async function processFile(file: File) {
     if (!file.type.startsWith("image/")) {
-      onError?.("Please select a valid image file");
+      onError("Please select a valid image file");
       return;
     }
 
@@ -38,7 +38,7 @@ export function ImageUploader({
       const result = await uploadStorageImage(file, bucket, folder);
 
       if (result.error) {
-        onError?.(result.error);
+        onError(result.error);
         return;
       }
 
@@ -46,7 +46,7 @@ export function ImageUploader({
         onChange(result.publicUrl);
       }
     } catch {
-      onError?.("Failed to upload image");
+      onError("Failed to upload image");
     } finally {
       setUploading(false);
     }
