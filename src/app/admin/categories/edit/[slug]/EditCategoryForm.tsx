@@ -47,7 +47,7 @@ export default function EditCategoryForm({
     }
     if (result?.success) {
       toast.add({
-        title: "Category updated",
+        title: "Category updated successfully",
         type: "success",
       });
 

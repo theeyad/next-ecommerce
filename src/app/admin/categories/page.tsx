@@ -29,7 +29,7 @@ export default async function AdminCategoriesPage() {
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-        {categories?.map((category) => (
+        {categories?.map((category: categoriesType) => (
           <Card key={category.id} className="relative py-0 pt-4 shadow-lg">
             <CardHeader>
               <CardTitle>{category.name}</CardTitle>
@@ -46,12 +46,14 @@ export default async function AdminCategoriesPage() {
                 categoryName={category.name}
               />
             </div>
-            <Image
-              src={category.image_url}
-              alt={category.name}
-              width={400}
-              height={400}
-            />
+            <div className="relative w-full h-92">
+              <Image
+                src={category.image_url}
+                alt={category.name}
+                fill
+                className="object-cover"
+              />
+            </div>
           </Card>
         ))}
       </div>

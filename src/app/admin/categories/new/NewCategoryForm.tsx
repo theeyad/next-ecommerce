@@ -14,8 +14,10 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { toast } from "@/components/ui/toast";
+import { useRouter } from "next/navigation";
 
 export default function NewCategoryForm() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -42,11 +44,12 @@ export default function NewCategoryForm() {
     }
     if (result?.success) {
       toast.add({
-        title: "Category created",
+        title: "Category created successfully",
         type: "success",
       });
 
       reset();
+      router.push("/admin/categories");
     }
   }
 
