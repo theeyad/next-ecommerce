@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { TbEditFilled } from "react-icons/tb";
 import { DeleteCategoryButton } from "@/app/admin/categories/DeleteCategoryButton";
+import { categoriesType } from "@/lib/validation/types";
 
 export default async function AdminCategoriesPage() {
   const supabase = await createClient();
@@ -29,13 +30,13 @@ export default async function AdminCategoriesPage() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
         {categories?.map((category) => (
-          <Card key={category.id} className="relative py-0 pt-4">
+          <Card key={category.id} className="relative py-0 pt-4 shadow-lg">
             <CardHeader>
               <CardTitle>{category.name}</CardTitle>
               <CardDescription>{category.description}</CardDescription>
             </CardHeader>
             <div className="flex gap-2 absolute top-4 right-4">
-              <Link href={`/admin/categories/${category.id}/edit`}>
+              <Link href={`/admin/categories/edit/${category.slug}`}>
                 <Button size="sm" variant="outline">
                   <TbEditFilled />
                 </Button>

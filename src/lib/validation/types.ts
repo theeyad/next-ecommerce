@@ -3,3 +3,11 @@ export type adminUserType = {
   email: string;
   avatar: string;
 };
+
+export type categoriesType = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image_url: string;
+};

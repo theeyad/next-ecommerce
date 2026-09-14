@@ -74,3 +74,15 @@ export function throttle<T extends (...args: any[]) => void>(
     }
   };
 }
+
+// Utility function to extract storage file path from Supabase public URL
+export function getStoragePathFromUrl(url: string, bucket: string) {
+  if (!url) return null;
+  const marker = `/public/${bucket}/`;
+  const index = url.indexOf(marker);
+  if (index !== -1) {
+    return url.substring(index + marker.length);
+  }
+  return null;
+}
+

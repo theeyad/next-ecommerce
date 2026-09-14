@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { adminUserType } from "@/lib/validation/types";
+import { signOut } from "@/actions/auth";
 
 export function NavUser({ userData }: { userData: adminUserType }) {
   const { isMobile } = useSidebar();
@@ -93,7 +94,7 @@ export function NavUser({ userData }: { userData: adminUserType }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signOut()}>
               <IconLogout />
               Log out
             </DropdownMenuItem>
