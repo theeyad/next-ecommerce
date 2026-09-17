@@ -9,17 +9,33 @@ import { User as SupabaseUser } from "@supabase/supabase-js";
 
 export default function CustomerNavbar() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     const supabase = createClient();
+
+    const fetchUserAndRole = async (authUser: SupabaseUser | null) => {
+      setUser(authUser);
+      if (authUser) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", authUser.id)
+          .maybeSingle();
+        setIsAdmin(profile?.role === "admin");
+      } else {
+        setIsAdmin(false);
+      }
+    };
+
     supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
+      fetchUserAndRole(data.user);
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      fetchUserAndRole(session?.user ?? null);
     });
 
     return () => {
@@ -66,14 +82,16 @@ export default function CustomerNavbar() {
 
         {/* User & Cart Actions */}
         <div className="flex items-center gap-3">
-          {/* Admin Link (If logged in / Admin) */}
-          <Link
-            href="/admin"
-            className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors cursor-default"
-            title="Admin Dashboard"
-          >
-            <Shield className="w-5 h-5" />
-          </Link>
+          {/* Admin Link (Only if logged in & Admin) */}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors cursor-default"
+              title="Admin Dashboard"
+            >
+              <Shield className="w-5 h-5" />
+            </Link>
+          )}
 
           {/* Cart Icon */}
           <Link

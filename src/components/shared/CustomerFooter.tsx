@@ -113,37 +113,6 @@ export default function CustomerFooter() {
             </ul>
           </div>
 
-          <div>
-            <h4 className="text-sm font-semibold text-foreground mb-3">
-              Account & Orders
-            </h4>
-            <ul className="space-y-2 text-xs text-muted-foreground">
-              <li>
-                <Link
-                  href="/login"
-                  className="hover:text-foreground transition-colors cursor-default"
-                >
-                  Sign In
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/register"
-                  className="hover:text-foreground transition-colors cursor-default"
-                >
-                  Create Account
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/admin"
-                  className="hover:text-foreground transition-colors cursor-default"
-                >
-                  Admin Portal
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
 
         <div className="mt-12 pt-6 border-t border-border/60 text-center text-xs text-muted-foreground">
