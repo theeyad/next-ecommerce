@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CoolThemeToggle } from "@/components/lightswind/cool-theme-toggle";
-import { ShoppingBag, Search, User, Shield } from "lucide-react";
+import { ShoppingBag, User, Shield } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { User as SupabaseUser } from "@supabase/supabase-js";
+import NavSearch from "@/components/shared/NavSearch";
 
 export default function CustomerNavbar() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
@@ -70,14 +71,9 @@ export default function CustomerNavbar() {
           </nav>
         </div>
 
-        {/* Search Bar */}
-        <div className="hidden sm:flex flex-1 max-w-xs relative items-center">
-          <Search className="w-4 h-4 absolute left-3 text-muted-foreground pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="w-full bg-sidebar border border-input rounded-full pl-9 pr-4 py-1.5 text-xs text-foreground outline-none focus:ring-2 focus:ring-ring/50 transition-all"
-          />
+        {/* Live Search Bar */}
+        <div className="hidden sm:flex flex-1 max-w-sm justify-center">
+          <NavSearch />
         </div>
 
         {/* User & Cart Actions */}
