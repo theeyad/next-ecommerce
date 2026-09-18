@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { TbTrashXFilled } from "react-icons/tb";
 import { deleteProduct } from "@/actions/admin";
-import { toast } from "@/components/ui/toast";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +14,8 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+import { useAdminMutation } from "@/hooks/useAdminMutation";
+import { queryKeys } from "@/lib/queryKeys";
 
 interface DeleteProductButtonProps {
   id: string;
@@ -26,27 +27,13 @@ export function DeleteProductButton({
   productName,
 }: DeleteProductButtonProps) {
   const [open, setOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
 
-  function handleDelete() {
-    startTransition(async () => {
-      const result = await deleteProduct(id);
-
-      if (result?.error) {
-        toast.add({
-          title: "Error deleting product",
-          description: result.error,
-          type: "error",
-        });
-      } else {
-        toast.add({
-          title: "Product deleted",
-          type: "success",
-        });
-        setOpen(false);
-      }
-    });
-  }
+  const { mutate: handleDelete, isPending } = useAdminMutation({
+    action: () => deleteProduct(id),
+    keysToInvalidate: [queryKeys.products.all],
+    successMessage: "Product deleted successfully",
+    onSuccess: () => setOpen(false),
+  });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -62,7 +49,8 @@ export function DeleteProductButton({
           <DialogTitle>Delete Product</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete{" "}
-            <strong className="text-foreground">{productName}</strong>? This action cannot be undone.
+            <strong className="text-foreground">{productName}</strong>? This
+            action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 

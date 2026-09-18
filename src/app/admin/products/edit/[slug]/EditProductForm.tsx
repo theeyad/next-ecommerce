@@ -15,9 +15,10 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { toast } from "@/components/ui/toast";
 import { categoriesType, productsType } from "@/lib/validation/types";
 import { useRouter } from "next/navigation";
+import { useAdminMutation } from "@/hooks/useAdminMutation";
+import { queryKeys } from "@/lib/queryKeys";
 
 interface EditProductFormProps {
   product: productsType;
@@ -54,23 +55,20 @@ export default function EditProductForm({
     },
   });
 
-  async function formSubmitHandler(values: FieldValues) {
-    const result = await updateProduct(product.id, values);
-
-    if (result?.error) {
-      setError("root", {
-        message: result.error,
-      });
-    }
-
-    if (result?.success) {
-      toast.add({
-        title: "Product updated successfully",
-        type: "success",
-      });
-
+  const { mutate: handleUpdateProduct, isPending } = useAdminMutation({
+    action: (values: FieldValues) => updateProduct(product.id, values),
+    keysToInvalidate: [queryKeys.products.all, queryKeys.categories.all],
+    successMessage: "Product updated successfully",
+    onSuccess: () => {
       router.push("/admin/products");
-    }
+    },
+    onError: (errorMessage) => {
+      setError("root", { message: errorMessage });
+    },
+  });
+
+  function formSubmitHandler(values: FieldValues) {
+    handleUpdateProduct(values);
   }
 
   return (
@@ -158,7 +156,7 @@ export default function EditProductForm({
                 <select
                   id="category_id"
                   {...register("category_id")}
-                  className="w-full outline-0 border border-input shadow-sm rounded-lg px-3 py-2 text-sm bg-background focus:outline-3 focus:border-muted transition-all duration-150 cursor-pointer"
+                  className="w-full outline-0 border border-input shadow-sm rounded-lg px-3 py-2 text-sm bg-background focus:outline-3 focus:border-muted transition-all duration-150 cursor-default"
                 >
                   <option value="">Select a category</option>
                   {categories.map((cat) => (
@@ -202,7 +200,7 @@ export default function EditProductForm({
                 onError={(message) => setError("images", { message })}
                 bucket="catalog"
                 folder="products"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isPending}
               />
 
               {errors.images && (
@@ -214,10 +212,10 @@ export default function EditProductForm({
             <Field>
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-black outline-0 text-white py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] transition-all duration-150 focus:outline-4 focus:border-muted disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                disabled={isSubmitting || isPending}
+                className="w-full bg-black outline-0 text-white py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] transition-all duration-150 focus:outline-4 focus:border-muted disabled:opacity-50 disabled:cursor-not-allowed cursor-default"
               >
-                {isSubmitting ? "Please wait..." : "Update Product"}
+                {isPending ? "Please wait..." : "Update Product"}
               </button>
             </Field>
           </FieldGroup>

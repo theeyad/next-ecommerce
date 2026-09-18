@@ -13,8 +13,9 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
+import { useAdminMutation } from "@/hooks/useAdminMutation";
+import { queryKeys } from "@/lib/queryKeys";
 
 export default function NewCategoryForm() {
   const router = useRouter();
@@ -35,22 +36,21 @@ export default function NewCategoryForm() {
     },
   });
 
-  async function formSubmitHandler(values: FieldValues) {
-    const result = await createCategory(values);
-    if (result?.error) {
-      setError("root", {
-        message: result.error,
-      });
-    }
-    if (result?.success) {
-      toast.add({
-        title: "Category created successfully",
-        type: "success",
-      });
-
+  const { mutate: handleCreateCategory, isPending } = useAdminMutation({
+    action: (values: FieldValues) => createCategory(values),
+    keysToInvalidate: [queryKeys.categories.all, queryKeys.products.all],
+    successMessage: "Category created successfully",
+    onSuccess: () => {
       reset();
       router.push("/admin/categories");
-    }
+    },
+    onError: (errorMessage) => {
+      setError("root", { message: errorMessage });
+    },
+  });
+
+  function formSubmitHandler(values: FieldValues) {
+    handleCreateCategory(values);
   }
 
   return (
@@ -110,7 +110,7 @@ export default function NewCategoryForm() {
                 onError={(message) => setError("cat_img", { message })}
                 bucket="catalog"
                 folder="categories"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isPending}
               />
 
               {errors.cat_img && (
@@ -121,10 +121,10 @@ export default function NewCategoryForm() {
             <Field>
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isPending}
                 className="w-full bg-black outline-0 text-white py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] transition-all duration-150 focus:outline-4 focus:border-muted disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? "Please wait..." : "Create category"}
+                {isPending ? "Please wait..." : "Create category"}
               </button>
             </Field>
           </FieldGroup>

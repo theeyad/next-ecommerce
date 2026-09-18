@@ -20,6 +20,8 @@ export async function createCategory(values: FieldValues) {
   if (error) return { error: error.message };
 
   revalidatePath("/admin/categories");
+  revalidatePath("/categories");
+  revalidatePath("/");
   return { success: true };
 }
 
@@ -47,6 +49,8 @@ export async function deleteCategory(id: string) {
   }
 
   revalidatePath("/admin/categories");
+  revalidatePath("/categories");
+  revalidatePath("/");
   return { success: true };
 }
 
@@ -88,6 +92,8 @@ export async function updateCategory(id: string, values: FieldValues) {
   }
 
   revalidatePath("/admin/categories");
+  revalidatePath("/categories");
+  revalidatePath("/");
   return { success: true };
 }
 
@@ -137,6 +143,9 @@ export async function createProduct(values: FieldValues) {
   }
 
   revalidatePath("/admin/products");
+  revalidatePath("/products");
+  revalidatePath("/categories");
+  revalidatePath("/");
   return { success: true };
 }
 
@@ -166,6 +175,9 @@ export async function deleteProduct(id: string) {
   }
 
   revalidatePath("/admin/products");
+  revalidatePath("/products");
+  revalidatePath("/categories");
+  revalidatePath("/");
   return { success: true };
 }
 
@@ -232,5 +244,8 @@ export async function updateProduct(id: string, values: FieldValues) {
   }
 
   revalidatePath("/admin/products");
+  revalidatePath("/products");
+  revalidatePath("/categories");
+  revalidatePath("/");
   return { success: true };
 }

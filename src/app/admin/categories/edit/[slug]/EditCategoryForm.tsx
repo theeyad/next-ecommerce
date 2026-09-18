@@ -12,9 +12,10 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
-import { categoriesType } from "@/lib/validation/types"
+import { categoriesType } from "@/lib/validation/types";
+import { useAdminMutation } from "@/hooks/useAdminMutation";
+import { queryKeys } from "@/lib/queryKeys";
 
 export default function EditCategoryForm({
   category,
@@ -38,21 +39,20 @@ export default function EditCategoryForm({
     },
   });
 
-  async function formSubmitHandler(values: FieldValues) {
-    const result = await updateCategory(category.id, values);
-    if (result?.error) {
-      setError("root", {
-        message: result.error,
-      });
-    }
-    if (result?.success) {
-      toast.add({
-        title: "Category updated successfully",
-        type: "success",
-      });
-
+  const { mutate: handleUpdateCategory, isPending } = useAdminMutation({
+    action: (values: FieldValues) => updateCategory(category.id, values),
+    keysToInvalidate: [queryKeys.categories.all, queryKeys.products.all],
+    successMessage: "Category updated successfully",
+    onSuccess: () => {
       router.push("/admin/categories");
-    }
+    },
+    onError: (errorMessage) => {
+      setError("root", { message: errorMessage });
+    },
+  });
+
+  function formSubmitHandler(values: FieldValues) {
+    handleUpdateCategory(values);
   }
 
   return (
@@ -112,7 +112,7 @@ export default function EditCategoryForm({
                 onError={(message) => setError("cat_img", { message })}
                 bucket="catalog"
                 folder="categories"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isPending}
               />
 
               {errors.cat_img && (
@@ -123,10 +123,10 @@ export default function EditCategoryForm({
             <Field>
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isPending}
                 className="w-full bg-black outline-0 text-white py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] transition-all duration-150 focus:outline-4 focus:border-muted disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? "Please wait..." : "Update category"}
+                {isPending ? "Please wait..." : "Update category"}
               </button>
             </Field>
           </FieldGroup>

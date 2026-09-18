@@ -15,9 +15,10 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { toast } from "@/components/ui/toast";
 import { categoriesType } from "@/lib/validation/types";
 import { useRouter } from "next/navigation";
+import { useAdminMutation } from "@/hooks/useAdminMutation";
+import { queryKeys } from "@/lib/queryKeys";
 
 interface NewProductFormProps {
   categories: categoriesType[];
@@ -47,24 +48,21 @@ export default function NewProductForm({ categories }: NewProductFormProps) {
     },
   });
 
-  async function formSubmitHandler(values: FieldValues) {
-    const result = await createProduct(values);
-
-    if (result?.error) {
-      setError("root", {
-        message: result.error,
-      });
-    }
-
-    if (result?.success) {
-      toast.add({
-        title: "Product created successfully",
-        type: "success",
-      });
-
+  const { mutate: handleCreateProduct, isPending } = useAdminMutation({
+    action: (values: FieldValues) => createProduct(values),
+    keysToInvalidate: [queryKeys.products.all, queryKeys.categories.all],
+    successMessage: "Product created successfully",
+    onSuccess: () => {
       reset();
       router.push("/admin/products");
-    }
+    },
+    onError: (errorMessage) => {
+      setError("root", { message: errorMessage });
+    },
+  });
+
+  function formSubmitHandler(values: FieldValues) {
+    handleCreateProduct(values);
   }
 
   return (
@@ -161,7 +159,7 @@ export default function NewProductForm({ categories }: NewProductFormProps) {
                 <select
                   id="category_id"
                   {...register("category_id")}
-                  className="w-full outline-0 border border-input shadow-sm rounded-lg px-3 py-2 text-sm bg-background focus:outline-3 focus:border-muted transition-all duration-150 cursor-pointer"
+                  className="w-full outline-0 border border-input shadow-sm rounded-lg px-3 py-2 text-sm bg-background focus:outline-3 focus:border-muted transition-all duration-150 cursor-default"
                 >
                   <option value="">Select a category</option>
                   {categories.map((cat) => (
@@ -209,7 +207,7 @@ export default function NewProductForm({ categories }: NewProductFormProps) {
                 onError={(message) => setError("images", { message })}
                 bucket="catalog"
                 folder="products"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isPending}
               />
 
               {errors.images && (
@@ -221,10 +219,10 @@ export default function NewProductForm({ categories }: NewProductFormProps) {
             <Field>
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-black outline-0 text-white py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] transition-all duration-150 focus:outline-4 focus:border-muted disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                disabled={isSubmitting || isPending}
+                className="w-full bg-black outline-0 text-white py-2 rounded-lg text-sm font-medium hover:tracking-[0.5px] transition-all duration-150 focus:outline-4 focus:border-muted disabled:opacity-50 disabled:cursor-not-allowed cursor-default"
               >
-                {isSubmitting ? "Please wait..." : "Create Product"}
+                {isPending ? "Please wait..." : "Create Product"}
               </button>
             </Field>
           </FieldGroup>
