@@ -38,6 +38,11 @@ CREATE TABLE profiles (
   full_name TEXT,
   avatar_url TEXT,
   role TEXT DEFAULT 'customer' NOT NULL, -- 'customer' | 'admin'
+  phone TEXT,
+  address_line1 TEXT,
+  city TEXT,
+  postal_code TEXT,
+  country TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
  

@@ -14,10 +14,16 @@ export default async function AdminLayout({
     data: { user },
   } = await supabase.auth.getUser();
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("full_name, avatar_url")
+    .eq("id", user?.id || "")
+    .maybeSingle();
+
   const userData = {
-    fullName: user?.user_metadata?.full_name,
-    email: user?.user_metadata?.email,
-    avatar: user?.user_metadata?.avatar_url,
+    fullName: profile?.full_name || user?.user_metadata?.full_name || "Admin",
+    email: user?.email || user?.user_metadata?.email || "",
+    avatar: profile?.avatar_url || user?.user_metadata?.avatar_url || "",
   };
 
   return (

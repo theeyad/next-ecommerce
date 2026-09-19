@@ -111,7 +111,7 @@ export function ImageUploader({
             type="button"
             onClick={handleRemoveImage}
             disabled={disabled}
-            className="absolute top-2 right-2 bg-black/70 text-white p-1 rounded-full hover:bg-black transition-colors disabled:opacity-50 cursor-pointer"
+            className="absolute top-2 right-2 bg-black/70 text-white p-1 rounded-full hover:bg-black transition-colors disabled:opacity-50 cursor-default"
           >
             <X className="w-4 h-4" />
           </button>
@@ -127,7 +127,7 @@ export function ImageUploader({
             "flex flex-col items-center justify-center w-full h-36 border-2 border-dashed rounded-lg transition-all duration-150 outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
             disabled || uploading
               ? "cursor-not-allowed opacity-60 pointer-events-none"
-              : "cursor-pointer",
+              : "cursor-default",
             isDragging
               ? "border-primary bg-primary/10 scale-[0.99]"
               : "border-input bg-background/50 hover:border-muted-foreground/50",

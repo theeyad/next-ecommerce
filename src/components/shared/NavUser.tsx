@@ -26,8 +26,11 @@ import {
 import { adminUserType } from "@/lib/validation/types";
 import { signOut } from "@/actions/auth";
 
+import { useRouter } from "next/navigation";
+
 export function NavUser({ userData }: { userData: adminUserType }) {
   const { isMobile } = useSidebar();
+  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -88,7 +91,9 @@ export function NavUser({ userData }: { userData: adminUserType }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => router.push("/admin/profile")}
+              >
                 <IconUserCircle />
                 Profile
               </DropdownMenuItem>

@@ -35,3 +35,17 @@ export type productsType = {
   categories?: { name: string } | null;
   product_images: productImageType[];
 };
+
+export type profileType = {
+  id: string;
+  full_name: string | null;
+  avatar_url: string | null;
+  role: "customer" | "admin";
+  phone?: string | null;
+  address_line1?: string | null;
+  city?: string | null;
+  postal_code?: string | null;
+  country?: string | null;
+  created_at?: string;
+  email?: string; // joined from auth.users
+};
