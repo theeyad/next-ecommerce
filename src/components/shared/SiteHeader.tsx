@@ -2,7 +2,7 @@
 
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { CoolThemeToggle } from "../lightswind/cool-theme-toggle";
+import { CoolThemeToggle } from "@/components/lightswind/cool-theme-toggle";
 
 export function SiteHeader() {
   return (

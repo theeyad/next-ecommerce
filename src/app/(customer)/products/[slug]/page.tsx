@@ -4,8 +4,8 @@ import { createStaticClient } from "@/lib/supabase/static";
 import { notFound } from "next/navigation";
 import { productsType } from "@/lib/validation/types";
 import { formatCurrency } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { ShoppingBag, CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle } from "lucide-react";
+import { AddToCartButton } from "@/components/shared/AddToCartButton";
 import { ProductImageGallery } from "./ProductImageGallery";
 
 interface ProductDetailsPageProps {
@@ -127,14 +127,11 @@ export default async function ProductDetailsPage({
 
           {/* Action CTA */}
           <div className="space-y-3 pt-2">
-            <Button
+            <AddToCartButton
+              product={product}
               size="lg"
-              className="w-full sm:w-auto px-10 gap-2 rounded-2xl cursor-default"
-              disabled={product.stock_quantity <= 0}
-            >
-              <ShoppingBag className="w-5 h-5" />
-              <span>Add to Cart</span>
-            </Button>
+              className="w-full sm:w-auto px-10 rounded-2xl"
+            />
           </div>
         </div>
       </div>

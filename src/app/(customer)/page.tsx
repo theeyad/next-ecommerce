@@ -4,7 +4,8 @@ import { createStaticClient } from "@/lib/supabase/static";
 import { productsType } from "@/lib/validation/types";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
+import { AddToCartButton } from "@/components/shared/AddToCartButton";
 
 export const revalidate = 60;
 
@@ -238,15 +239,12 @@ export default async function Home() {
                           </div>
                         )}
                       </div>
-
-                      <Button
+                      {/* Add to Cart Button */}
+                      <AddToCartButton
+                        product={product}
                         size="sm"
-                        className="gap-1.5 rounded-xl"
-                        disabled={product.stock_quantity <= 0}
-                      >
-                        <ShoppingBag className="w-4 h-4" />
-                        <span>Add</span>
-                      </Button>
+                        className="rounded-xl"
+                      />
                     </div>
                   </div>
                 </Link>

@@ -8,12 +8,19 @@ import { createClient } from "@/lib/supabase/client";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import NavSearch from "@/components/shared/NavSearch";
 
+import { useProductsStore } from "@/lib/store/productsStore";
+
 export default function CustomerNavbar() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  const totalItems = useProductsStore((state) => state.getTotalItems());
 
   useEffect(() => {
+    setMounted(true);
     const supabase = createClient();
+
 
     const fetchUserAndRole = async (authUser: SupabaseUser | null) => {
       setUser(authUser);
@@ -96,9 +103,16 @@ export default function CustomerNavbar() {
             title="Shopping Cart"
           >
             <ShoppingBag className="w-5 h-5" />
-            <span className="absolute top-1 right-1 bg-primary text-primary-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-              0
-            </span>
+            {mounted && totalItems > 0 && (
+              <span className="absolute top-1 right-1 bg-primary text-primary-foreground text-[10px] font-bold min-w-4 h-4 px-1 rounded-full flex items-center justify-center animate-in zoom-in-50 duration-200">
+                {totalItems > 99 ? "99+" : totalItems}
+              </span>
+            )}
+            {!mounted && (
+              <span className="absolute top-1 right-1 bg-primary text-primary-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                0
+              </span>
+            )}
           </Link>
 
           {/* Auth Button / Profile */}

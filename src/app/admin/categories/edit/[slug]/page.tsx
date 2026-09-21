@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import EditCategoryForm from "./EditCategoryForm";
+import EditCategoryForm from "@/app/admin/categories/edit/[slug]/EditCategoryForm";
 
 interface AdminEditCategoryPageProps {
   params: Promise<{ slug: string }>;

@@ -4,7 +4,8 @@ import { createStaticClient } from "@/lib/supabase/static";
 import { productsType } from "@/lib/validation/types";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag, SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
+import { AddToCartButton } from "@/components/shared/AddToCartButton";
 
 interface CustomerProductsPageProps {
   searchParams: Promise<{
@@ -251,14 +252,7 @@ export default async function CustomerProductsPage({
                           )}
                         </div>
 
-                        <Button
-                          size="sm"
-                          className="gap-1.5 rounded-xl cursor-default"
-                          disabled={product.stock_quantity <= 0}
-                        >
-                          <ShoppingBag className="w-4 h-4" />
-                          <span>Add</span>
-                        </Button>
+                        <AddToCartButton product={product} />
                       </div>
                     </div>
                   </Link>

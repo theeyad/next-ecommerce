@@ -919,7 +919,7 @@ Build in this order — each phase is testable before moving to the next:
 2. **Auth** — login, register, Google OAuth, middleware, session -> Done
 3. **Admin — Categories** — simplest CRUD, no images -> Done
 4. **Admin — Products** — CRUD + image upload to Supabase Storage -> Done
-5. **Public catalog** — product listing, filters, product detail, SSG
+5. **Public catalog** — product listing, filters, product detail, SSG -> Done
 6. **Cart** — Zustand store, cart page, cart drawer
 7. **Checkout + Stripe** — form, PaymentIntent, success page
 8. **Stripe webhook** — order status update, stock decrement

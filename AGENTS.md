@@ -8,6 +8,12 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
+<!-- BEGIN:note -->
+
+VERY IMPORTANT NOTE: ALWAYS DISCUSS WITH ME BEFORE IMPLEMENTING ANY THING, AND DO NOT IMPLEMENT ANY THING WITHOUT MY APPROVAL.
+
+<!-- END:note -->
+
 <!-- BEGIN:design-rules -->
 
 # Design System rules

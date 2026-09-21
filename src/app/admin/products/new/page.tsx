@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import NewProductForm from "./NewProductForm";
+import NewProductForm from "@/app/admin/products/new/NewProductForm";
 
 export default async function AdminNewProductPage() {
   const supabase = await createClient();

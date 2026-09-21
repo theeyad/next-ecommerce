@@ -49,3 +49,5 @@ export type profileType = {
   created_at?: string;
   email?: string; // joined from auth.users
 };
+
+export type { checkoutSchemaType } from "@/lib/validation/checkout";

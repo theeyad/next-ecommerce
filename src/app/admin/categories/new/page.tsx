@@ -1,4 +1,4 @@
-import NewCategoryForm from "./NewCategoryForm";
+import NewCategoryForm from "@/app/admin/categories/new/NewCategoryForm";
 
 export default function AdminNewCategoryPage() {
   return (

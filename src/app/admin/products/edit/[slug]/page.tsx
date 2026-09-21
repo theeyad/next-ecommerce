@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
-import EditProductForm from "./EditProductForm";
+import EditProductForm from "@/app/admin/products/edit/[slug]/EditProductForm";
 import { productsType } from "@/lib/validation/types";
 
 interface AdminEditProductPageProps {

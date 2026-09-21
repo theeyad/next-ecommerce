@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { TbEditFilled } from "react-icons/tb";
-import { DeleteProductButton } from "./DeleteProductButton";
+import { DeleteProductButton } from "@/app/admin/products/DeleteProductButton";
 import { productsType } from "@/lib/validation/types";
 import { formatCurrency } from "@/lib/utils";
 
