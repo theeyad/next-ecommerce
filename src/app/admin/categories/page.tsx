@@ -33,7 +33,9 @@ export default async function AdminCategoriesPage() {
           <Card key={category.id} className="relative py-0 pt-4 shadow-lg">
             <CardHeader>
               <CardTitle>{category.name}</CardTitle>
-              <CardDescription>{category.description}</CardDescription>
+              <CardDescription className="line-clamp-2 me-24">
+                {category.description}
+              </CardDescription>
             </CardHeader>
             <div className="flex gap-2 absolute top-4 right-4">
               <Link href={`/admin/categories/edit/${category.slug}`}>

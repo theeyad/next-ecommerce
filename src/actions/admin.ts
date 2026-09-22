@@ -12,7 +12,10 @@ export async function createCategory(values: FieldValues) {
 
   const { error } = await supabase.from("categories").insert({
     name: values.cat_name,
-    slug: values.cat_name.toLowerCase().replace(/\s+/g, "-"),
+    slug: values.cat_name
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, ""),
     description: values.cat_desc,
     image_url: values.cat_img,
   });
@@ -69,7 +72,10 @@ export async function updateCategory(id: string, values: FieldValues) {
     .from("categories")
     .update({
       name: values.cat_name,
-      slug: values.cat_name.toLowerCase().replace(/\s+/g, "-"),
+      slug: values.cat_name
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, ""),
       description: values.cat_desc,
       image_url: values.cat_img,
     })
@@ -84,7 +90,7 @@ export async function updateCategory(id: string, values: FieldValues) {
   ) {
     const oldFilePath = getStoragePathFromUrl(
       existingCategory.image_url,
-      "catalog"
+      "catalog",
     );
     if (oldFilePath) {
       await supabase.storage.from("catalog").remove([oldFilePath]);
@@ -107,7 +113,10 @@ export async function createProduct(values: FieldValues) {
     .from("products")
     .insert({
       name: values.name,
-      slug: values.name.toLowerCase().replace(/\s+/g, "-"),
+      slug: values.name
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, ""),
       description: values.description,
       price: values.price,
       compare_at_price: values.compare_at_price || null,
@@ -130,7 +139,7 @@ export async function createProduct(values: FieldValues) {
         url: img.url,
         position: index,
         is_primary: img.is_primary ?? index === 0,
-      })
+      }),
     );
 
     const { error: imagesError } = await supabase
@@ -195,7 +204,10 @@ export async function updateProduct(id: string, values: FieldValues) {
     .from("products")
     .update({
       name: values.name,
-      slug: values.name.toLowerCase().replace(/\s+/g, "-"),
+      slug: values.name
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, ""),
       description: values.description,
       price: values.price,
       compare_at_price: values.compare_at_price || null,
@@ -209,7 +221,7 @@ export async function updateProduct(id: string, values: FieldValues) {
 
   // 3. Sync product images: Delete existing rows and insert updated rows
   const newImageUrls = (values.images || []).map(
-    (img: { url: string }) => img.url
+    (img: { url: string }) => img.url,
   );
 
   await supabase.from("product_images").delete().eq("product_id", id);
@@ -221,7 +233,7 @@ export async function updateProduct(id: string, values: FieldValues) {
         url: img.url,
         position: index,
         is_primary: img.is_primary ?? index === 0,
-      })
+      }),
     );
 
     const { error: insertImgError } = await supabase

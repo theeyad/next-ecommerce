@@ -19,6 +19,13 @@ import { categoriesType, productsType } from "@/lib/validation/types";
 import { useRouter } from "next/navigation";
 import { useAdminMutation } from "@/hooks/useAdminMutation";
 import { queryKeys } from "@/lib/queryKeys";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface EditProductFormProps {
   product: productsType;
@@ -153,18 +160,25 @@ export default function EditProductForm({
                 <div className="w-fit">
                   <FieldLabel htmlFor="category_id">Category</FieldLabel>
                 </div>
-                <select
-                  id="category_id"
-                  {...register("category_id")}
-                  className="w-full outline-0 border border-input shadow-sm rounded-lg px-3 py-2 text-sm bg-background focus:outline-3 focus:border-muted transition-all duration-150 cursor-default"
+                <Select
+                  value={watch("category_id") || ""}
+                  onValueChange={(val) =>
+                    setValue("category_id", val as string, { shouldValidate: true })
+                  }
                 >
-                  <option value="">Select a category</option>
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger className="w-full cursor-default">
+                    <SelectValue placeholder="Select a category">
+                      {categories.find((c) => c.id === watch("category_id"))?.name}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.id} label={cat.name}>
+                        {cat.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 {errors.category_id && (
                   <FieldError>{errors.category_id.message}</FieldError>
                 )}
