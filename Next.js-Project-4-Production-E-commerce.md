@@ -920,9 +920,9 @@ Build in this order — each phase is testable before moving to the next:
 3. **Admin — Categories** — simplest CRUD, no images -> Done
 4. **Admin — Products** — CRUD + image upload to Supabase Storage -> Done
 5. **Public catalog** — product listing, filters, product detail, SSG -> Done
-6. **Cart** — Zustand store, cart page, cart drawer
-7. **Checkout + Stripe** — form, PaymentIntent, success page
-8. **Stripe webhook** — order status update, stock decrement
+6. **Cart** — Zustand store, cart page, cart drawer -> Done
+7. **Checkout + Stripe** — form, PaymentIntent, success page -> Done
+8. **Stripe webhook** — order status update, stock decrement -> Done
 9. **Order history** — customer orders page + detail
 10. **Admin — Orders** — view all orders, update status
 11. **Admin — Dashboard** — stats overview

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { profileType } from "@/lib/validation/types";
+import { profileType, orderType } from "@/lib/validation/types";
 import { formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,22 +13,25 @@ import {
   Calendar,
   Shield,
   Edit3,
-  ShoppingBag,
-  Package,
 } from "lucide-react";
+import ProfileOrdersHistory from "@/components/shared/ProfileOrdersHistory";
 
 import { IconLogout } from "@tabler/icons-react";
 import { signOut } from "@/actions/auth";
 
 interface ProfileViewCardProps {
   profile: profileType;
+  orders?: orderType[];
   isAdminView?: boolean;
 }
 
 export function ProfileViewCard({
   profile,
+  orders = [],
   isAdminView = false,
 }: ProfileViewCardProps) {
+  const isUserAdmin = profile.role === "admin" || isAdminView;
+
   const userInitials = profile.full_name
     ? profile.full_name
         .split(" ")
@@ -38,7 +41,7 @@ export function ProfileViewCard({
         .substring(0, 2)
     : "U";
 
-  const editHref = isAdminView ? "/admin/profile/edit" : "/profile/edit";
+  const editHref = isUserAdmin ? "/admin/profile/edit" : "/profile/edit";
 
   return (
     <div className="space-y-8">
@@ -199,31 +202,8 @@ export function ProfileViewCard({
         </div>
       </div>
 
-      {/* CUSTOMER ORDER HISTORY PLACEHOLDER CONTAINER (Text & Icon, No external images) */}
-      {!isAdminView && (
-        <div className="bg-sidebar border border-dashed border-border p-8 rounded-2xl text-center space-y-2">
-          <Package className="w-8 h-8 mx-auto text-muted-foreground/60" />
-          <h4 className="font-heading font-bold text-sm text-foreground">
-            Order History
-          </h4>
-          <p className="text-xs text-muted-foreground max-w-md mx-auto">
-            You haven&apos;t placed any orders yet. Once you complete checkout,
-            your order history and tracking details will appear here.
-          </p>
-          <div className="pt-2">
-            <Link href="/products" className="cursor-default">
-              <Button
-                size="sm"
-                variant="outline"
-                className="gap-2 rounded-full cursor-default"
-              >
-                <ShoppingBag className="w-4 h-4" />
-                <span>Explore Products</span>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      )}
+      {/* CUSTOMER ORDER HISTORY SECTION (Hidden for Admins) */}
+      {!isUserAdmin && <ProfileOrdersHistory orders={orders} />}
     </div>
   );
 }

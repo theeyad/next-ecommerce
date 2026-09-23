@@ -28,9 +28,22 @@ export default async function CustomerProfilePage() {
     email: user.email,
   };
 
+  const { data: userOrders } = await supabase
+    .from("orders")
+    .select(`
+      *,
+      order_items (*)
+    `)
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <ProfileViewCard profile={fullProfile} isAdminView={false} />
+      <ProfileViewCard
+        profile={fullProfile}
+        orders={(userOrders as any) || []}
+        isAdminView={false}
+      />
     </div>
   );
 }

@@ -118,7 +118,7 @@ export default function CustomerNavbar() {
           {/* Auth Button / Profile */}
           {user ? (
             <Link
-              href="/profile"
+              href={isAdmin ? "/admin/profile" : "/profile"}
               className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors cursor-default"
               title="Your Account"
             >

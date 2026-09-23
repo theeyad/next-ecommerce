@@ -104,7 +104,7 @@ export default async function CategoryProductsPage({
                   href={`/products/${product.slug}`}
                   className="cursor-default"
                 >
-                  <div className="group relative flex flex-col justify-between bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="h-full group relative flex flex-col justify-between bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div>
                       {/* Image Container */}
                       <div className="relative w-full h-56 bg-muted overflow-hidden">

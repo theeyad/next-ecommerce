@@ -3,7 +3,6 @@ import Image from "next/image";
 import { createStaticClient } from "@/lib/supabase/static";
 import { productsType } from "@/lib/validation/types";
 import { formatCurrency } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { SlidersHorizontal } from "lucide-react";
 import { AddToCartButton } from "@/components/shared/AddToCartButton";
 
@@ -193,7 +192,7 @@ export default async function CustomerProductsPage({
                     href={`/products/${product.slug}`}
                     className="cursor-default"
                   >
-                    <div className="group relative flex flex-col justify-between bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <div className="h-full group relative flex flex-col justify-between bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       <div>
                         {/* Image Container */}
                         <div className="relative w-full h-56 bg-muted overflow-hidden">

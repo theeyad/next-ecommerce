@@ -10,6 +10,7 @@ import {
   checkoutSchemaType,
 } from "@/lib/validation/checkout";
 import { useProductsStore } from "@/lib/store/productsStore";
+import { createCheckoutSession } from "@/actions/checkout";
 import { formatCurrency } from "@/lib/utils";
 import {
   SHIPPING_FEE,
@@ -25,6 +26,8 @@ import {
   CheckCircle2,
   ArrowLeft,
   Package,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 
 interface InitialUserData {
@@ -43,6 +46,9 @@ interface CheckoutClientProps {
 
 export function CheckoutClient({ initialUser }: CheckoutClientProps) {
   const [mounted, setMounted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const { items, getSubtotal } = useProductsStore();
 
   const {
@@ -101,8 +107,21 @@ export function CheckoutClient({ initialUser }: CheckoutClientProps) {
     );
   }
 
-  const handlePlaceOrder = (_data: checkoutSchemaType) => {
-    // Stripe checkout integration will be connected in the next phase
+  const handlePlaceOrder = async (data: checkoutSchemaType) => {
+    setIsSubmitting(true);
+    setServerError(null);
+
+    const res = await createCheckoutSession(data, items);
+
+    if (res.success && res.url) {
+      // Redirect to Stripe Hosted Checkout
+      window.location.href = res.url;
+    } else {
+      setIsSubmitting(false);
+      setServerError(
+        res.error || "Failed to initiate Stripe checkout. Please try again."
+      );
+    }
   };
 
   return (
@@ -125,6 +144,13 @@ export function CheckoutClient({ initialUser }: CheckoutClientProps) {
           </p>
         </div>
       </div>
+
+      {serverError && (
+        <div className="bg-destructive/10 border border-destructive/20 text-destructive text-xs p-4 rounded-2xl flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{serverError}</span>
+        </div>
+      )}
 
       <form
         onSubmit={handleSubmit(handlePlaceOrder)}
@@ -274,12 +300,12 @@ export function CheckoutClient({ initialUser }: CheckoutClientProps) {
             </div>
           </div>
 
-          {/* Payment Method Option Placeholder */}
+          {/* Payment Method Selection Card */}
           <div className="bg-card border border-border p-6 sm:p-8 rounded-3xl space-y-4 shadow-sm">
             <div className="flex items-center gap-2 border-b border-border pb-4">
               <CreditCard className="w-5 h-5 text-primary" />
               <h2 className="font-heading font-bold text-lg text-foreground">
-                Payment Selection
+                Payment Method
               </h2>
             </div>
 
@@ -290,10 +316,10 @@ export function CheckoutClient({ initialUser }: CheckoutClientProps) {
                 </div>
                 <div>
                   <span className="block text-xs font-bold text-foreground">
-                    Cash on Delivery / Direct Standard Payment
+                    Stripe Secure Checkout
                   </span>
                   <span className="block text-[11px] text-muted-foreground">
-                    Pay securely upon delivery or order fulfillment.
+                    Pay safely using Credit/Debit Card or Apple Pay via Stripe.
                   </span>
                 </div>
               </div>
@@ -393,10 +419,20 @@ export function CheckoutClient({ initialUser }: CheckoutClientProps) {
             <Button
               type="submit"
               size="lg"
+              disabled={isSubmitting}
               className="w-full gap-2 rounded-2xl font-bold uppercase tracking-wider text-xs py-6 cursor-default"
             >
-              <span>Place Order</span>
-              <CheckCircle2 className="w-4 h-4" />
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Connecting to Stripe...</span>
+                </>
+              ) : (
+                <>
+                  <span>Pay with Stripe</span>
+                  <CheckCircle2 className="w-4 h-4" />
+                </>
+              )}
             </Button>
 
             <div className="flex items-center justify-center gap-1.5 text-[10px] text-muted-foreground/80 uppercase font-semibold tracking-wider text-center">

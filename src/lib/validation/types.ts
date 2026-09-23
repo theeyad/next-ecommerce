@@ -50,4 +50,34 @@ export type profileType = {
   email?: string; // joined from auth.users
 };
 
+export type orderItemType = {
+  id: string;
+  order_id: string;
+  product_id?: string | null;
+  product_name: string;
+  product_price: number;
+  quantity: number;
+  subtotal: number;
+};
+
+export type orderType = {
+  id: string;
+  user_id?: string | null;
+  status: string;
+  total_amount: number;
+  stripe_payment_intent_id?: string | null;
+  shipping_address?: {
+    fullName?: string;
+    email?: string;
+    phone?: string;
+    addressLine1?: string;
+    city?: string;
+    postalCode?: string;
+    country?: string;
+  } | null;
+  created_at: string;
+  updated_at?: string;
+  order_items?: orderItemType[];
+};
+
 export type { checkoutSchemaType } from "@/lib/validation/checkout";
