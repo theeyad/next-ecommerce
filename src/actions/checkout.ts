@@ -28,6 +28,44 @@ export async function createCheckoutSession(
       data: { user },
     } = await supabase.auth.getUser();
 
+    // 2.5 Real-time Inventory Stock Audit
+    const productIds = cartItems.map((item) => item.product.id);
+    const { data: dbProducts, error: stockErr } = await supabase
+      .from("products")
+      .select("id, name, stock_quantity, is_active")
+      .in("id", productIds);
+
+    if (stockErr || !dbProducts) {
+      return {
+        success: false,
+        error: "Failed to verify product stock. Please try again.",
+      };
+    }
+
+    for (const item of cartItems) {
+      const dbProd = dbProducts.find((p) => p.id === item.product.id);
+
+      if (!dbProd || !dbProd.is_active) {
+        return {
+          success: false,
+          error: `"${item.product.name}" is currently unavailable.`,
+        };
+      }
+
+      if (item.quantity > dbProd.stock_quantity) {
+        if (dbProd.stock_quantity === 0) {
+          return {
+            success: false,
+            error: `"${dbProd.name}" is out of stock.`,
+          };
+        }
+        return {
+          success: false,
+          error: `Only ${dbProd.stock_quantity} unit(s) of "${dbProd.name}" available in stock.`,
+        };
+      }
+    }
+
     // 3. Compute Totals
     const subtotal = cartItems.reduce(
       (sum, item) => sum + item.product.price * item.quantity,
@@ -96,7 +134,7 @@ export async function createCheckoutSession(
       line_items: lineItems,
       mode: "payment",
       success_url: `${siteUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${siteUrl}/cart`,
+      cancel_url: `${siteUrl}/checkout`,
       customer_email: validatedData.email,
       metadata: {
         user_id: user?.id || "",

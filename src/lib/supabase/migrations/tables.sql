@@ -52,12 +52,12 @@ CREATE TABLE orders (
   user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
   status TEXT DEFAULT 'pending' NOT NULL, -- pending | paid | shipped | delivered | cancelled
   total_amount DECIMAL(10,2) NOT NULL,
-  stripe_payment_intent_id TEXT,
+  stripe_payment_intent_id TEXT UNIQUE,
   shipping_address JSONB,
   created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
   updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
- 
+
 -- Order Items
 CREATE TABLE order_items (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -70,6 +70,26 @@ CREATE TABLE order_items (
 );
 
 ------------------------------------------------------
+-- Atomic Inventory Decrement RPC Function (Conditional)
+------------------------------------------------------
+DROP FUNCTION IF EXISTS decrement_product_stock(UUID, INT);
+
+CREATE OR REPLACE FUNCTION decrement_product_stock(p_id UUID, p_qty INT)
+RETURNS BOOLEAN AS $$
+DECLARE
+  v_rows_updated INT;
+BEGIN
+  UPDATE products
+  SET stock_quantity = stock_quantity - p_qty,
+      updated_at = NOW()
+  WHERE id = p_id AND stock_quantity >= p_qty;
+
+  GET DIAGNOSTICS v_rows_updated = ROW_COUNT;
+  RETURN v_rows_updated > 0;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+------------------------------------------------------
 -- Permissions (Grants)
 ------------------------------------------------------
 GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
@@ -78,6 +98,8 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO authentic
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO anon;
 GRANT ALL ON ALL TABLES IN SCHEMA public TO service_role;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO service_role;
+
+GRANT EXECUTE ON FUNCTION decrement_product_stock(UUID, INT) TO service_role;
 
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO authenticated;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO anon;
